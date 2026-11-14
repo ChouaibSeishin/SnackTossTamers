@@ -1,0 +1,7 @@
+# Store text files with LF line endings in the repository and in the working
+# folder, so Windows tools, Codex, and Rojo all see the same bytes.
+* text=auto eol=lf
+
+# Roblox binary formats must never be line-ending converted.
+*.rbxl binary
+*.rbxm binary
