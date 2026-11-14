@@ -9,11 +9,11 @@ A Roblox simulator: train Strength, throw food across themed zones, attract and 
 
 ## Current status
 
-**Phase 0 — Project foundation.** No gameplay systems yet. The only code is a sync-check that proves files reach Roblox Studio.
+**Phase 0 — Project foundation: complete.** No gameplay systems yet. The only code is a sync-check that proves files reach Roblox Studio.
 
 | Phase | Status |
 |---|---|
-| 0. Project foundation | In progress — awaiting Studio sync confirmation |
+| 0. Project foundation | Done — Rojo live sync verified in Studio (2026-11-14) |
 | 1. Map blockout | Not started |
 
 ## Toolchain
