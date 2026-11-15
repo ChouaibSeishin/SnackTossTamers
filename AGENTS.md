@@ -48,11 +48,24 @@ Always distinguish clearly between: **code inspected**, **automated checks run**
   |---|---|---|
   | `src/ReplicatedStorage/Shared/` | `ReplicatedStorage > Shared` | Config ModuleScripts, shared pure logic, types, remotes |
   | `src/ServerScriptService/Server/` | `ServerScriptService > Server` | Server services and game logic |
+  | `src/ServerStorage/Tools/` | `ServerStorage > Tools` | Edit-mode tools (never run during gameplay) |
   | `src/StarterPlayer/StarterPlayerScripts/Client/` | `StarterPlayer > StarterPlayerScripts > Client` | Client UI and controllers |
 
 - File naming: `*.server.luau` = Script, `*.client.luau` = LocalScript, `*.luau` = ModuleScript.
-- Add new folders (`Config/`, `Services/`, `Controllers/`, `Remotes/`, `tests/`) only when a phase needs them.
+- Add new folders (`Services/`, `Controllers/`, `Remotes/`) only when a phase needs them.
 - When adding a new top-level Rojo mapping, update `default.project.json`, `README.md`, and this file together.
+
+## 4a. World and map rules
+
+Details: `docs/WORLD.md`.
+
+- **Coordinates:** the throwing line is `X = 0`; throws go toward `+X`; **throw distance = landing X**; `Z = 0` is the field center; ground top is `Y = 0`; Town is at negative X. All values in studs.
+- **`WorldConfig`** (`Shared/Config/WorldConfig.luau`) is the single source for zone boundaries, field size, lane width, and marker spacing. Never hard-code zone distances elsewhere; use `getZoneAtDistance` / `getZoneAtPosition`. Zone boundaries must match `GAME_DESIGN.md`; change both together, with approval.
+- **The map is generated** in edit mode by `ServerStorage/Tools/WorldBuilder` into `Workspace.GeneratedWorld` and saved in the place file. `Build()` only deletes and rebuilds `GeneratedWorld`. Never hand-edit inside it; hand-made additions go in `Workspace.WorldDecor`. After changing `WorldConfig` or `WorldBuilder`, the user must run `Build()` in Studio and save the place.
+- **Landing lane** (`|Z| < Field.LaneHalfWidth`, up to `Field.MaxLandingDistance`) must stay free of anything collidable or raycast-visible. Ground parts carry the `LandingSurface` tag and a `ZoneId` attribute; future landing detection raycasts only against those.
+- Purely visual parts: `CanCollide = false`, `CanQuery = false`, `CanTouch = false`, no shadow. All world parts anchored. Keep the part count modest (currently about 900).
+- `WorldConfig.luau` and `WorldBuilder.luau` avoid Luau-only syntax (type annotations, `continue`, `+=`) so they can be tested with plain Lua outside Studio. Run `tests/run_tests.lua` after changing `WorldConfig`.
+- Edit-mode modules are required from the Command Bar as `require(module:Clone())` because Studio caches required modules.
 
 ## 5. Security: the server is authoritative
 

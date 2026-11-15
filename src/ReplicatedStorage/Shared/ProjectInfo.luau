@@ -9,7 +9,7 @@
 
 local ProjectInfo = {
 	Name = "Snack Toss Tamers",
-	Phase = "Phase 0 - Project foundation",
+	Phase = "Phase 1 - World and map",
 	SyncCheckMessage = "Rojo sync OK",
 }
 
